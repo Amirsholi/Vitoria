@@ -4,8 +4,12 @@ import Button from "@/app/components/products/Button";
 import ProductImage from "@/app/components/products/ProductImage";
 import SetQuantity from "@/app/components/products/SetQuantity";
 import SetType from "@/app/components/products/SetType";
+import { useCart } from "@/hooks/useCart";
 import { Rating } from "@mui/material";
-import { useCallback, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { MdCheckCircle } from "react-icons/md";
 
 
 export type CartProductType = {
@@ -41,6 +45,17 @@ const Horizontal = () =>{
 
 
 const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
+    
+    const router = useRouter()
+
+    const [isProductInCart, setIsProductInCart] = useState(false)
+
+    const {handleAddProductToCart, cartProducts} = useCart()
+
+    const AddToCart = useCallback(() => {
+        handleAddProductToCart(cartProduct)
+        toast.success("Se agregó al Carrito")
+    },[])
 
     const [cartProduct, setCartProduct] = useState<CartProductType>({
         id: product.id,
@@ -53,21 +68,17 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
         price: product.price
     })
 
-
-
     const handleColorSelected = useCallback((value: selectedImgType) => {
         setCartProduct((prev) => {return {...prev, selectedImg: value}})
     },
     [cartProduct.selectedImg])
     
 
-
     const productRating = product.reviews.reduce((acc: number, item: any) => item.rating + acc, 0) / product.reviews.length;
 
 
-
     const handleQtyIncrease = useCallback(() => {
-        console.log("increase")
+
         if(cartProduct.quantity === 10){
             return;
         }
@@ -78,7 +89,6 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
     }, [cartProduct])
 
     const handleQtyDecrease = useCallback(() => {
-        console.log("decrease")
 
         if(cartProduct.quantity === 1){
             return; 
@@ -89,6 +99,17 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
           })
     }, [cartProduct])
 
+    useEffect(()=>{
+
+        setIsProductInCart(false)
+        if(cartProducts){
+            const existingIndex = cartProducts.findIndex((item)=> item.id === product.id)
+            if(existingIndex > -1){
+                setIsProductInCart(true)
+            }
+        }
+
+    },[cartProducts])
 
 
     return ( 
@@ -105,23 +126,39 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
                     {product.description}
                 </div>
                 <Horizontal/>
-                <div>
-                    <span className="font-semibold">CATEGORY: </span>{product.category}
-                </div>
-                <div>
-                    <span className="font-semibold">BRAND: </span>{product.brand}
-                </div>
                 <div className={product.inStock ? "text-teal-400" : "text-rose-400"}>
-                    {product.inStock ? "In stock" : "Out Stock"}
+                    {product.inStock ? "En Stock" : "Sin Stock"}
+                </div>
+                <div className="flex gap-2">
+                    <div>
+                        <span className="font-semibold">Producto: </span>{product.category}
+                    </div>
+                    <div>
+                        <span className="font-semibold">Brand: </span>{product.brand}
+                    </div>
                 </div>
                 <Horizontal/>
-                <div><SetType CartProduct={cartProduct} images={product.images} handTypeSelect={handleColorSelected}/></div>
+                {isProductInCart ? (
+                <>
+                <p className="mb-2 text-slate-500 flex items-center gap-1">
+                    <MdCheckCircle size={20} className="text-teal-400"/>
+                    <span>De agregó Carrito</span>
+                </p>
+                <div>
+                    <Button label="Carrito" outline onClick={()=>{router.push("/cart")}}/>
+                </div>
+                </>
+                ) : (
+                <>
+                <SetType CartProduct={cartProduct} images={product.images} handTypeSelect={handleColorSelected}/>
                 <Horizontal/>
                 <SetQuantity cartProduct={cartProduct} handleQtyIncrease={handleQtyIncrease} handleQtyDecrease={handleQtyDecrease}/>
                 <Horizontal/>
                 <div className="max-w-[300px]">
-                <Button label="Add to Cart" onClick={() => {}}/>
+                <Button label="Add to Cart" onClick={AddToCart}/>
                 </div>
+                </>
+                )}
             </div>
         </div>
      );
