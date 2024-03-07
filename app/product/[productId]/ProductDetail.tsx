@@ -117,24 +117,27 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
             <ProductImage cartProduct={cartProduct} product={product} handleColorSelect={handleColorSelected}/>
             <div className="flex flex-col gap-1 text-slate-500 text-sm">
                 <h2 className="text-3xl font-medium text-slate-700">{product.name}</h2>
+                
                 <div className="flex items-center gap-2">
                     <Rating value={productRating} readOnly/>
                     <div>{product.reviews.length} reviews</div>
+                </div>
+                <div className={product.inStock ? "text-teal-400" : "text-rose-400"}>
+                    {product.inStock ? "En Stock" : "Sin Stock"}
                 </div>
                 <Horizontal/>
                 <div className="text-justify">
                     {product.description}
                 </div>
                 <Horizontal/>
-                <div className={product.inStock ? "text-teal-400" : "text-rose-400"}>
-                    {product.inStock ? "En Stock" : "Sin Stock"}
-                </div>
+                
+                
                 <div className="flex gap-2">
                     <div>
-                        <span className="font-semibold">Producto: </span>{product.category}
+                        <Button label={product.category} small onClick={()=>{router.push("/")}}/>
                     </div>
                     <div>
-                        <span className="font-semibold">Brand: </span>{product.brand}
+                        <Button label={product.brand} small onClick={()=>{router.push("/")}}/> 
                     </div>
                 </div>
                 <Horizontal/>
