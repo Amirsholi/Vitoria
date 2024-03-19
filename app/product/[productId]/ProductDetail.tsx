@@ -6,10 +6,11 @@ import SetQuantity from "@/app/components/products/SetQuantity";
 import SetType from "@/app/components/products/SetType";
 import { useCart } from "@/hooks/useCart";
 import { Rating } from "@mui/material";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { MdCheckCircle } from "react-icons/md";
+import { MdArrowBack, MdCheckCircle } from "react-icons/md";
 
 
 export type CartProductType = {
@@ -145,7 +146,7 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
                 <>
                 <p className="mb-2 text-slate-500 flex items-center gap-1">
                     <MdCheckCircle size={20} className="text-teal-400"/>
-                    <span>De agregó Carrito</span>
+                    <span>Se agregó Carrito</span>
                 </p>
                 <div>
                     <Button label="Carrito" outline onClick={()=>{router.push("/cart")}}/>
@@ -162,6 +163,10 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
                 </div>
                 </>
                 )}
+                <Link href={"/"} className="text-slate-500 flex items-center gap-1 mt-2">
+                        <MdArrowBack/>
+                        <span>Volver a la Tienda</span>
+                    </Link>
             </div>
         </div>
      );

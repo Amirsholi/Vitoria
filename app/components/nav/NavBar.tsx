@@ -2,10 +2,15 @@ import Link from "next/link";
 import Container from "../container";
 import { Dancing_Script } from "next/font/google";
 import CartCount from "./CartCount";
+import UserMenu from "./UserMenu";
+import { getCurrentUser } from "@/actions/getCurrentUser";
 
 const dancingScript = Dancing_Script({ subsets:["latin"],weight:["400"]})
 
-const NavBar = () => {
+const NavBar = async () => {
+
+    const currentUser = await getCurrentUser()
+
     return(
         <div className="stiky top-0 w-full bg-slate-200 z-20 shadow-sm">
             <div className="py-4 border-b-[1px]">
@@ -17,11 +22,11 @@ const NavBar = () => {
 
                         <div className="flex items-center gap-8 md:gap-12">
                             <CartCount/>
-                            <Link href="/login">User</Link>
+                            <UserMenu currentUser={currentUser}/>
                         </div>
 
                     </div>
-                </Container>
+                </Container> 
             </div>
         </div>
     );

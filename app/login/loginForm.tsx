@@ -8,11 +8,16 @@ import Heading from "../components/products/Heading";
 import { FieldValues, useForm, SubmitHandler } from "react-hook-form";
 import Button from "../components/products/Button";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
+
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 
 const LoginForm = () => {
 
     const [isLoading, setIsLoading] = useState(false);
+
     const {register, handleSubmit, formState:{errors}} = useForm<FieldValues>({
         defaultValues:{
             email: "",
@@ -20,9 +25,25 @@ const LoginForm = () => {
         }
     })
 
+    const router = useRouter()
+
     const onSubmit:SubmitHandler<FieldValues> = (data) => {
+
         setIsLoading(true)
-        
+
+        signIn("credentials", {...data, redirect: false}).then((callback) => {
+            setIsLoading(false)
+
+            if (callback?.ok){
+                router.push("/")
+                router.refresh()
+                toast.success("¡Bienvenido!")
+            }
+
+            if (callback?.error){
+                toast.error(callback.error)
+            }
+        })
     }
 
     return ( 

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import { AiOutlineFacebook } from "react-icons/ai";
@@ -13,75 +13,111 @@ import toast from "react-hot-toast";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-
 const RegisterForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FieldValues>({
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+  });
 
-    const [isLoading, setIsLoading] = useState(false);
-    const {register, handleSubmit, formState:{errors}} = useForm<FieldValues>({
-        defaultValues:{
-            name:"",
-            email: "",
-            password:""
-        }
-    })
+  const router = useRouter();
 
-    const router = useRouter()
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    setIsLoading(true);
 
+    axios
+      .post("/api/register", data)
+      .then(() => {
+        signIn("credentials", {
+          email: data.email,
+          password: data.password,
+          redirect: false,
+        }).then((callback) => {
+          if (callback?.ok) {
+            router.push("/cart");
+            router.refresh();
+            toast.success("¡Bienvenido!");
+          }
 
-    const onSubmit:SubmitHandler<FieldValues> = (data) => {
+          if (callback?.error) {
+            toast.error(callback.error);
+          }
+        });
+      })
 
-        setIsLoading(true)
+      .catch(() => toast.error("Ups! Algo anda mal"))
 
-        axios.post("/api/register", data)
-        .then(() => {
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
-            toast.success("Usuario creado")
+  return (
+    <>
+      <Heading title="Registrate" />
 
-            signIn("credentials", {email: data.email, password: data.password, redirect: false})
+      <Button
+        outline
+        label="Sing up with Goolge"
+        icon={AiOutlineGoogle}
+        onClick={() => {}}
+      />
+      <Button
+        outline
+        label="Sing up with Facebook"
+        icon={AiOutlineFacebook}
+        onClick={() => {}}
+      />
 
-            .then((callback) => {
-                
-                if (callback?.ok){
-                    router.push("/cart")
-                    router.refresh()
-                    toast.success("¡Bienvenido!")
-                }
+      <hr className="bg-slate-300 w-full h-px" />
 
-                if (callback?.error){
-                    toast.error(callback.error)
-                }
-            })
-        })
+      <Input
+        id="name"
+        label="Name"
+        disabled={isLoading}
+        register={register}
+        errors={errors}
+        required
+      />
 
-        .catch(() => toast.error("Ups! Algo anda mal"))
+      <Input
+        id="email"
+        label="Email"
+        disabled={isLoading}
+        register={register}
+        errors={errors}
+        required
+      />
 
-        .finally(() => {
-            setIsLoading(false)
-        })
-    }
+      <Input
+        id="password"
+        label="Password"
+        type="password"
+        disabled={isLoading}
+        register={register}
+        errors={errors}
+        required
+      />
 
-    return ( 
-        <>
-        <Heading title="Registrate"/>
+      <Button
+        label={isLoading ? "Loading" : "Sing Up"}
+        onClick={handleSubmit(onSubmit)}
+      />
+      <p className="text-sm">
+        ¿Ya Tienes una cuenta?{" "}
+        <Link className="underline" href="/login">
+          Log In
+        </Link>
+      </p>
+    </>
+  );
+};
 
-        <Button outline label="Sing up with Goolge" icon={AiOutlineGoogle} onClick={()=>{}}/>
-        <Button outline label="Sing up with Facebook" icon={AiOutlineFacebook} onClick={()=>{}}/>
-
-        <hr className="bg-slate-300 w-full h-px"/>
-
-        <Input id="name" label="Name" disabled={isLoading} 
-        register={register} errors={errors} required/>
-
-        <Input id="email" label="Email" disabled={isLoading} 
-        register={register} errors={errors} required/>
-
-        <Input id="password" label="Password" type="password" disabled={isLoading} 
-        register={register} errors={errors} required/>
-
-        <Button label={isLoading ? "Loading" : "Sing Up"} onClick={handleSubmit(onSubmit)}/>
-        <p className="text-sm">¿Ya Tienes una cuenta?{" "}<Link className="underline" href="/login">Log In</Link></p>
-        </>
-    );
-}
- 
 export default RegisterForm;
