@@ -19,4 +19,5 @@ Este proyecto es un e-commerce desarrollado con las tecnologías Next.js, TypeSc
 Para ejecutar el proyecto en modo desarrollo, utiliza el siguiente comando:
 
 ```bash
+npm install
 npm run dev
