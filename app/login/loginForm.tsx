@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AiOutlineGoogle } from "react-icons/ai";
+import { AiOutlineFacebook } from "react-icons/ai";
 import Input from "../components/inputs/input";
 import Heading from "../components/products/Heading";
 import { FieldValues, useForm, SubmitHandler } from "react-hook-form";
@@ -29,6 +30,7 @@ const LoginForm = () => {
         <Heading title="Sing in"/>
 
         <Button outline label="Continue with Google" icon={AiOutlineGoogle} onClick={()=>{}}/>
+        <Button outline label="Continue with Facebook" icon={AiOutlineFacebook} onClick={()=>{}}/>
 
         <hr className="bg-slate-300 w-full h-px"/>
 
