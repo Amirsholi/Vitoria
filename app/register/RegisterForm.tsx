@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { AiOutlineFacebook } from "react-icons/ai";
 import { AiOutlineGoogle } from "react-icons/ai";
 import Input from "../components/inputs/input";
 import Heading from "../components/products/Heading";
@@ -65,16 +64,11 @@ const RegisterForm = () => {
 
       <Button
         outline
-        label="Sing up with Goolge"
+        label="Registrate con Goolge"
         icon={AiOutlineGoogle}
-        onClick={() => {}}
+        onClick={()=>signIn("google", { callbackUrl: "/"})}
       />
-      <Button
-        outline
-        label="Sing up with Facebook"
-        icon={AiOutlineFacebook}
-        onClick={() => {}}
-      />
+
 
       <hr className="bg-slate-300 w-full h-px" />
 
