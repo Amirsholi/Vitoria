@@ -14,7 +14,7 @@ export default function Home() {
         <div className='grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 cl:grid-cols-5 2xl:grid-cols-6 gap-8'>
           {products.map((product: any) => {
             return(
-              <ProductCard data={product}/>
+              <ProductCard data={product} key={product.id}/>
             )
           })}
         </div>

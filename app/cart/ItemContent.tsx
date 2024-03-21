@@ -17,10 +17,10 @@ interface ItemContentProps{
 const ItemContent:React.FC<ItemContentProps> = ({item}) => {
    
     const {handleRemoveProductFromCart, handleCartQtyIncrease, handleCartQtyDecrease} = useCart()
-    const DeleteFromCart = useCallback(()=>{
+    const DeleteFromCart = ()=>{
         handleRemoveProductFromCart(item)
         toast.success("Se Eliminó del Carrito")
-    },[])
+    }
 
     return ( 
         <div className="grid grid-cols-5 text-xs md:text-sm gap-4 border-slate-200 py-4 items-center">

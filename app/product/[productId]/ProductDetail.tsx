@@ -53,10 +53,10 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({product}) => {
 
     const {handleAddProductToCart, cartProducts} = useCart()
 
-    const AddToCart = useCallback(() => {
+    const AddToCart = () => {
         handleAddProductToCart(cartProduct)
         toast.success("Se agregó al Carrito")
-    },[])
+    }
 
     const [cartProduct, setCartProduct] = useState<CartProductType>({
         id: product.id,
