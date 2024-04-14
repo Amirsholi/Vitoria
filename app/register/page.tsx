@@ -1,20 +1,18 @@
-
-import FormWarp from "../components/FormWrap";
-import Container from "../components/container";
+import getCurrentUser from "@/actions/getCurrentUser";
+import Container from "../components/Container";
+import FormWrap from "../components/FormWrap";
 import RegisterForm from "./RegisterForm";
 
+const Register = async () => {
+  const currentUser = await getCurrentUser();
 
+  return (
+    <Container>
+      <FormWrap>
+        <RegisterForm currentUser={currentUser} />
+      </FormWrap>
+    </Container>
+  );
+};
 
-const Register = () => {
-    return ( 
-        <div>
-            <Container>
-                <FormWarp>
-                    <RegisterForm/>
-                </FormWarp>
-            </Container>
-        </div>
-     );
-}
- 
 export default Register;

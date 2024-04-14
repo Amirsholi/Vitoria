@@ -1,17 +1,17 @@
-import FormWarp from "../components/FormWrap";
-import Container from "../components/container";
-import LoginForm from "./loginForm";
+import getCurrentUser from "@/actions/getCurrentUser";
+import Container from "../components/Container";
+import FormWrap from "../components/FormWrap";
+import LoginForm from "./LoginForm";
 
+const Login = async () => {
+  const currentUser = await getCurrentUser();
+  return (
+    <Container>
+      <FormWrap>
+        <LoginForm currentUser={currentUser} />
+      </FormWrap>
+    </Container>
+  );
+};
 
-
-const Login = () => {
-    return ( 
-        <Container>
-            <FormWarp>
-                <LoginForm/>
-            </FormWarp>
-        </Container>
-     );
-}
- 
 export default Login;
